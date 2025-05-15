@@ -53,6 +53,13 @@ class DIVU:
 
 	def set_temp(self, channel, temp):
 
+		channel_number = int(channel.replace("Chan", ""))
+		if channel_number > 12:
+			all_channels = all_channelsB
+
+		else:
+			all_channels = all_channelsA
+			
 		i = 1
 
 		dist_opt = abs(temp - self.resistance_to_temperature(all_channels[channel][0]))
