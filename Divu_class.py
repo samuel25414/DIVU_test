@@ -60,7 +60,7 @@ class DIVU:
 		else:
 			all_channels = all_channelsA
 
-		i = 1
+		i = 2
 
 		dist_last = abs(temp - self.resistance_to_temperature(all_channels[channel][0]))
 		dist_new = abs(temp - self.resistance_to_temperature(all_channels[channel][1]))
