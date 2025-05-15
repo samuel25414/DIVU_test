@@ -1,3 +1,5 @@
+from DicB import all_channelsA
+from DicB import all_channelsB
 import spidev
 import time
 import RPi.GPIO as GPIO
@@ -18,6 +20,12 @@ spi.cshigh = False
 class DIVU:
 	def __init__(self):
 		pass
+
+	def init_device(self):
+		self.reset_device()
+		time.sleep(0.1)
+		self.write(0)
+		time.sleep(0.1)
 
 	def reset_device(self):
 		GPIO.output(RESET_PIN, 0)
@@ -42,6 +50,35 @@ class DIVU:
 			spi.xfer2(data)
 
 		print(f"DIVU resistors set in value: {value}")
+
+	def set_temp(self, channel, temp):
+
+		i = 1
+
+		dist_opt = abs(temp - self.resistance_to_temperature(all_channels[channel][0]))
+		dist_new = abs(temp - self.resistance_to_temperature(all_channels[channel][1]))
+
+		while dist_opt > dist_new:
+			dist_opt = dist_new
+			dist_new = abs(temp - self.resistance_to_temperature(all_channels[channel][i]))
+			i += 1
+
+		i -= 1
+		self.write(i)
+		
+		return all_channels[channel][i], self.resistance_to_temperature(all_channels[channel][i])
+
+
+	def resistance_to_temperature(self, resistencia):
+		if resistencia > 10e3:
+			temperatura = ((-24536.24) + (0.02350289 * resistencia * 100) +
+					(0.000000001034084 * (resistencia * 100) ** 2)) / 100
+		else:
+			temperatura = ((-24564.58) + (0.02353718 * resistencia * 100) +
+					(0.000000001027502 * (resistencia * 100) ** 2)) / 100
+		return temperatura
+
+
 
 	def close(self):
 		print("Closing SPI and GPIO")
