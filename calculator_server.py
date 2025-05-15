@@ -11,6 +11,7 @@ def index():
     selected_temp = None
     selected_channel = 1  # Default to channel 1
     channel_data = None
+    selected_r = 10000
     
     if request.method == 'POST':
         try:
@@ -23,9 +24,9 @@ def index():
             
             # Replace simulated data with real measurements
             channel_data = {
-                'theoretical': {'R': 10000, 'T': selected_temp},  # No theoretical data
+                'theoretical': {'R': selected_r, 'T': selected_temp},  # No theoretical data
                 'measured': {'R': actualR, 'T': actualT},
-                'error': {'R': None, 'T': None}  # Can compute later if needed
+                'error': {'R': actualR-selected_r, 'T': actualT-selected_temp}  # Can compute later if needed
             }
             
         except (TypeError, ValueError) as e:
