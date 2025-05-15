@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIVU Test Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .section {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 300px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f2f2f2;
+        }
+        select, button {
+            padding: 8px;
+            margin: 5px 0;
+        }
+        .highlight {
+            background-color: #ffffcc;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        hr {
+            margin: 20px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <h1>DIVU Test Interface</h1>
+    
+    <form method="post">
+        <div class="container">
+            <div class="section">
+                <h2>Temperature Selection</h2>
+                <select name="temperature" required>
+                    <option value="">Select a temperature</option>
+                    {% for temp in temperatures %}
+                        <option value="{{ temp }}" {% if selected_temp == temp %}selected{% endif %}>
+                            {{ temp }}°C
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Apply</button>
+            </div>
+            
+            <div class="section">
+                <h2>Channel Selection (1-48)</h2>
+                <select name="channel">
+                    {% for channel in channels %}
+                        <option value="{{ channel }}" {% if selected_channel == channel %}selected{% endif %}>
+                            Channel {{ channel }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
+    
+    {% if selected_temp is not none and channel_data %}
+        <hr>
+        
+        <div class="container">
+            <div class="section">
+                <h2>Theoretical Values</h2>
+                <table class="data-table">
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>R (Ω)</td>
+                        <td>{{ "%.2f"|format(channel_data['theoretical']['R']) }}</td>
+                    </tr>
+                    <tr>
+                        <td>T (°C)</td>
+                        <td>{{ "%.2f"|format(channel_data['theoretical']['T']) }}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2>Measured Values</h2>
+                <table class="data-table">
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>R (Ω)</td>
+                        <td>{{ "%.2f"|format(channel_data['measured']['R']) }}</td>
+                    </tr>
+                    <tr>
+                        <td>T (°C)</td>
+                        <td>{{ "%.2f"|format(channel_data['measured']['T']) }}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="section highlight">
+                <h2>Error Calculation</h2>
+                <table class="data-table">
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Error</th>
+                    </tr>
+                    <tr>
+                        <td>R (Ω)</td>
+                        <td>{{ "%.2f"|format(channel_data['error']['R']) }}</td>
+                    </tr>
+                    <tr>
+                        <td>T (°C)</td>
+                        <td>{{ "%.2f"|format(channel_data['error']['T']) }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section" style="margin-top: 20px;">
+            <h3>Current Test Parameters</h3>
+            <p>Temperature: {{ selected_temp }}°C | Channel: {{ selected_channel }}</p>
+        </div>
+    {% endif %}
+</body>
+</html>
