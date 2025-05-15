@@ -1,4 +1,4 @@
-from DicB import all_channelsA
+from DicA import all_channelsA
 from DicB import all_channelsB
 import spidev
 import time
@@ -59,7 +59,7 @@ class DIVU:
 
 		else:
 			all_channels = all_channelsA
-			
+
 		i = 1
 
 		dist_opt = abs(temp - self.resistance_to_temperature(all_channels[channel][0]))
