@@ -48,6 +48,7 @@ def index():
             
             if selected_temp in simulated_data and selected_channel in simulated_data[selected_temp]:
                 channel_data = simulated_data[selected_temp][selected_channel]
+                divu.reset_device()
                 divu.write(abs(selected_temp))
         except (TypeError, ValueError):
             # Handle cases where conversion fails (None or invalid input)
