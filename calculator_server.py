@@ -23,7 +23,7 @@ def index():
             
             # Replace simulated data with real measurements
             channel_data = {
-                'theoretical': {'R': None, 'T': selected_temp},  # No theoretical data
+                'theoretical': {'R': 10000, 'T': selected_temp},  # No theoretical data
                 'measured': {'R': actualR, 'T': actualT},
                 'error': {'R': None, 'T': None}  # Can compute later if needed
             }
