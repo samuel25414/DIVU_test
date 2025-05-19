@@ -75,23 +75,58 @@ def index():
             
             if measuredT is not None:
                 channel_data = {
-                    'theoretical': {'R': theoreticalR, 'T': theoreticalT},
-                    'measured': {'R': None, 'T': measuredT},  # OPC server might not provide R
-                    'error': {'R': None, 'T': measuredT - theoreticalT}
+                    'theoretical': {
+                        'R': theoreticalR if theoreticalR is not None else 0,
+                        'T': theoreticalT if theoreticalT is not None else 0
+                    },
+                    'measured': {
+                        'R': 0,  # Default to 0 since OPC might not provide R
+                        'T': measuredT if measuredT is not None else 0
+                    },
+                    'error': {
+                        'R': 0 - (theoreticalR if theoreticalR is not None else 0),
+                        'T': (measuredT if measuredT is not None else 0) - 
+                             (theoreticalT if theoreticalT is not None else 0)
+                    }
                 }
             else:
                 print(f"Could not read measured temperature for channel {selected_channel}")
+                # Provide default data even if measurement fails
+                channel_data = {
+                    'theoretical': {
+                        'R': theoreticalR if theoreticalR is not None else 0,
+                        'T': theoreticalT if theoreticalT is not None else 0
+                    },
+                    'measured': {
+                        'R': 0,
+                        'T': 0
+                    },
+                    'error': {
+                        'R': 0 - (theoreticalR if theoreticalR is not None else 0),
+                        'T': 0 - (theoreticalT if theoreticalT is not None else 0)
+                    }
+                }
                 
         except (TypeError, ValueError) as e:
             print(f"Error processing input: {e}")
+            # Provide default data on error
+            channel_data = {
+                'theoretical': {'R': 0, 'T': 0},
+                'measured': {'R': 0, 'T': 0},
+                'error': {'R': 0, 'T': 0}
+            }
     
     return render_template(
         'divu_test.html',
-        temperatures=[-80, -45, 0, 25, 60],  # Fixed typo (-0 to 0)
+        temperatures=[-80, -45, 0, 25, 60],
         channels=range(1, 49),
         selected_temp=selected_temp,
         selected_channel=selected_channel,
-        channel_data=channel_data
+        channel_data=channel_data if channel_data else {
+            'theoretical': {'R': 0, 'T': 0},
+            'measured': {'R': 0, 'T': 0},
+            'error': {'R': 0, 'T': 0}
+        }
     )
 
 if __name__ == '__main__':
