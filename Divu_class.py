@@ -62,18 +62,18 @@ class DIVU:
 
 		i = 2
 
-		dist_last = abs(temp - self.resistance_to_temperature(all_channels[channel][0]))
-		dist_new = abs(temp - self.resistance_to_temperature(all_channels[channel][1]))
+		dist_last = abs(temp - all_channels[channel][0])
+		dist_new = abs(temp - all_channels[channel][1])
 
 		while dist_new < dist_last:
 			dist_last = dist_new
-			dist_new = abs(temp - self.resistance_to_temperature(all_channels[channel][i]))
+			dist_new = abs(temp - all_channels[channel][i])
 			i += 1
 
 		i -= 1
 		self.write(i)
 		
-		return all_channels[channel][i], self.resistance_to_temperature(all_channels[channel][i])
+		return all_channels[channel][i], all_channels[channel][i]
 
 
 	def resistance_to_temperature(self, resistencia):
