@@ -85,6 +85,18 @@ class DIVU:
 					(0.000000001027502 * (resistencia * 100) ** 2)) / 100
 		return temperatura
 
+	def temperature_to_resistance(self, t):
+		A = 3.9083e-3
+		B =-5.775e-7
+		if t < 0:
+			C = -4.183e-12
+		else: 
+			C = 0
+
+		resistance = 1e4 * (1 + (A*t) + (B*t*t) + C*(t-100)*t*t*t)
+
+		return resistance
+			
 
 
 	def close(self):

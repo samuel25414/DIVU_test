@@ -69,10 +69,11 @@ def index():
             
             # Set theoretical temperature using DIVU
             theoreticalR, theoreticalT = divu.set_temp(f"Chan{selected_channel}", selected_temp)
+            theoreticalR = divu.temperature_to_resistance(theoreticalR)
             
             # Get actual measured temperature from OPC server
             measuredT = get_opc_channel_value(selected_channel)
-            
+            measuredR = divu.temperature_to_resistance(measuredT)
             if measuredT is not None:
                 channel_data = {
                     'theoretical': {
@@ -80,7 +81,7 @@ def index():
                         'T': theoreticalT if theoreticalT is not None else 0
                     },
                     'measured': {
-                        'R': 0,  # Default to 0 since OPC might not provide R
+                        'R': theoreticalR if theoreticalR is not None else 0,
                         'T': measuredT if measuredT is not None else 0
                     },
                     'error': {
