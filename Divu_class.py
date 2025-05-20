@@ -70,7 +70,7 @@ class DIVU:
 			dist_new = abs(temp - all_channels[channel][i])
 			i += 1
 
-		i -= 1
+		i -= 2
 		self.write(i)
 		
 		return all_channels[channel][i], all_channels[channel][i]
