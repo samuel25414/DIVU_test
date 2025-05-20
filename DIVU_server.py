@@ -77,7 +77,7 @@ def index():
             if measuredT is not None:
                 channel_data = {
                     'theoretical': {
-                        'R': theoreticalR if theoreticalR is not None else 0,
+                        'R': measuredR if measuredR is not None else 0,
                         'T': theoreticalT if theoreticalT is not None else 0
                     },
                     'measured': {
@@ -85,9 +85,8 @@ def index():
                         'T': measuredT if measuredT is not None else 0
                     },
                     'error': {
-                        'R': 0 - (theoreticalR if theoreticalR is not None else 0),
-                        'T': (measuredT if measuredT is not None else 0) - 
-                             (theoreticalT if theoreticalT is not None else 0)
+                        'R': (measuredR if measuredR is not None else 0) - (theoreticalR if theoreticalR is not None else 0),
+                        'T': (measuredT if measuredT is not None else 0) - (theoreticalT if theoreticalT is not None else 0)
                     }
                 }
             else:
