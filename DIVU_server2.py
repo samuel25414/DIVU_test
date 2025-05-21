@@ -38,6 +38,7 @@ def get_opc_channel_value(channel_number):
         channel_node = systec_instance.GetNode(channel_name)
         if channel_node:
             value = channel_node.get_value()
+            print(value)
             return float(value) if value is not None else None
     except Exception as e:
         print(f"Error reading channel {channel_number} from OPC server: {e}")
@@ -61,7 +62,6 @@ def index():
             
             # Get actual measured temperature from OPC server
             measuredT = get_opc_channel_value(selected_channel)
-            print(measuredT)
             measuredR = divu.temperature_to_resistance(measuredT) if measuredT is not None else None
             
             channel_data = {
