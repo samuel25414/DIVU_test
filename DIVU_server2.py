@@ -60,7 +60,7 @@ def index():
             theoreticalR = divu.temperature_to_resistance(theoreticalR)
             
             # Get actual measured temperature from OPC server
-            measuredR = divu.voltage_to_resistance(get_opc_channel_value(selected_channel))
+            measuredR = divu.voltage_to_resistance(get_opc_channel_value(selected_channel)/1e6)
             measuredT = divu.resistance_to_temperature(measuredR)
             
             channel_data = {
