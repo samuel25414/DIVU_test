@@ -4,6 +4,8 @@ import spidev
 import time
 import RPi.GPIO as GPIO
 
+vref = 0.79932
+
 # GPIO setup
 RESET_PIN = 24
 GPIO.setmode(GPIO.BCM)
@@ -96,6 +98,10 @@ class DIVU:
 		resistance = 1e4 * (1 + (A*t) + (B*t*t) + C*(t-100)*t*t*t)
 
 		return resistance
+	
+	def voltage_to_resistance(self, volt):
+		R = 1e4*(vref/(volt-vref))
+		return R
 			
 
 
